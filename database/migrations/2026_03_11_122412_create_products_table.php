@@ -16,7 +16,7 @@ return new class extends Migration
             // Foreign Key ke tabel Users (Laravel default)
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->integer('qty');
+            $table->integer('quantity'); // Pastikan namanya 'quantity', bukan 'qty';
             $table->decimal('price', 15, 2); // decimal cocok untuk harga
             $table->timestamps();
         });
