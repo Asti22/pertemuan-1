@@ -5,26 +5,30 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate; // Tambahkan ini
+use Illuminate\Support\Facades\Gate;
+// IMPORT Form Request buatan kita
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        // Menggunakan with('user') agar loading lebih cepat (Eager Loading)
+        // Eager Loading 'user' agar tidak lambat saat narik data
         $products = Product::with('user')->get();
 
         return view('product.index', compact('products'));
     }
 
-    public function store(Request $request)
+    /**
+     * PERTEMUAN 6: Menggunakan StoreProductRequest untuk Validasi
+     */
+    public function store(StoreProductRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'quantity' => 'required|integer',
-            'price' => 'required|numeric',
-            'user_id' => 'required|exists:users,id',
-        ]);
+        // Laravel otomatis menjalankan validasi sebelum masuk ke sini.
+        // Jika gagal, user langsung dikembalikan ke form dengan pesan error.
+        
+        $validated = $request->validated();
 
         Product::create($validated);
 
@@ -47,7 +51,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        // [PERTEMUAN 5] Cek apakah user boleh edit produk ini
+        // [PERTEMUAN 5] Otorisasi Policy
         Gate::authorize('update', $product);
 
         $users = User::orderBy('name')->get();
@@ -55,19 +59,18 @@ class ProductController extends Controller
         return view('product.edit', compact('product', 'users'));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * PERTEMUAN 6: Menggunakan UpdateProductRequest untuk Validasi
+     */
+    public function update(UpdateProductRequest $request, $id)
     {
         $product = Product::findOrFail($id);
 
-        // [PERTEMUAN 5] Proteksi saat proses update
+        // [PERTEMUAN 5] Otorisasi Policy
         Gate::authorize('update', $product);
 
-        $validated = $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'quantity' => 'sometimes|integer',
-            'price' => 'sometimes|numeric',
-            'user_id' => 'sometimes|exists:users,id',
-        ]);
+        // Ambil data yang sudah lolos validasi
+        $validated = $request->validated();
 
         $product->update($validated);
 
@@ -78,7 +81,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        // [PERTEMUAN 5] Proteksi saat proses delete
+        // [PERTEMUAN 5] Otorisasi Policy
         Gate::authorize('delete', $product);
 
         $product->delete();
@@ -86,7 +89,9 @@ class ProductController extends Controller
         return redirect()->route('product.index')->with('success', 'Product berhasil dihapus');
     }
 
-    // [TAMBAHAN TUGAS KELAS B] Fungsi Export Dummy
+    /**
+     * [TAMBAHAN TUGAS KELAS B] Fungsi Export
+     */
     public function export()
     {
         Gate::authorize('export-product');

@@ -29,10 +29,14 @@
                             <input type="text" id="name" name="name" value="{{ old('name') }}" 
                                 placeholder="e.g. Wireless Headphones"
                                 class="w-full px-4 py-2.5 rounded-lg border text-sm transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent 
-                                {{ $errors->has('name') ? 'border-red-500 bg-red-50/50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700' }} 
+                                {{ $errors->has('name') ? 'border-red-500 ring-1 ring-red-500 bg-red-50/50 dark:bg-red-900/30' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700' }} 
                                 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500">
+                            
+                            {{-- Perbaikan Warna Error Name --}}
                             @error('name')
-                                <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
+                                <p class="mt-2 text-sm text-red-600 dark:text-red-400 font-bold animate-pulse">
+                                    ⚠️ {{ $message }}
+                                </p>
                             @enderror
                         </div>
 
@@ -43,12 +47,15 @@
                                     Quantity <span class="text-red-500">*</span>
                                 </label>
                                 <input type="number" id="quantity" name="quantity" value="{{ old('quantity') }}"
-                                    placeholder="0" min="0"
+                                    placeholder="0"
                                     class="w-full px-4 py-2.5 rounded-lg border text-sm transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent 
-                                    {{ $errors->has('quantity') ? 'border-red-500 bg-red-50/50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700' }} 
+                                    {{ $errors->has('quantity') ? 'border-red-500 ring-1 ring-red-500 bg-red-50/50 dark:bg-red-900/30' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700' }} 
                                     text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500">
+                                
                                 @error('quantity')
-                                    <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
+                                    <p class="mt-2 text-sm text-red-600 dark:text-red-400 font-bold">
+                                        ⚠️ {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -57,12 +64,15 @@
                                     Price (Rp) <span class="text-red-500">*</span>
                                 </label>
                                 <input type="number" id="price" name="price" value="{{ old('price') }}"
-                                    placeholder="0" min="0" step="0.01"
+                                    placeholder="0" step="0.01"
                                     class="w-full px-4 py-2.5 rounded-lg border text-sm transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent 
-                                    {{ $errors->has('price') ? 'border-red-500 bg-red-50/50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700' }} 
+                                    {{ $errors->has('price') ? 'border-red-500 ring-1 ring-red-500 bg-red-50/50 dark:bg-red-900/30' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700' }} 
                                     text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500">
+                                
                                 @error('price')
-                                    <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
+                                    <p class="mt-2 text-sm text-red-600 dark:text-red-400 font-bold">
+                                        ⚠️ {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                         </div>
@@ -74,17 +84,20 @@
                             </label>
                             <select id="user_id" name="user_id" 
                                 class="w-full px-4 py-2.5 rounded-lg border text-sm transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent 
-                                {{ $errors->has('user_id') ? 'border-red-400 bg-red-50/20' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700' }} 
+                                {{ $errors->has('user_id') ? 'border-red-500 ring-1 ring-red-500 bg-red-50/50 dark:bg-red-900/30' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700' }} 
                                 text-gray-900 dark:text-gray-100">
                                 <option value="">-- Select Owner --</option>
                                 @foreach ($users as $user)
-                                    <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                        {{ $user->name }}
+                                    <option value="{{ $user->id }}" 
+                                        {{ (old('user_id') ?? Auth::id()) == $user->id ? 'selected' : '' }}>
+                                        {{ $user->name }} {{ $user->id == Auth::id() ? '(Me)' : '' }}
                                     </option>
                                 @endforeach
                             </select>
                             @error('user_id')
-                                <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
+                                <p class="mt-2 text-sm text-red-600 dark:text-red-400 font-bold">
+                                    ⚠️ {{ $message }}
+                                </p>
                             @enderror
                         </div>
 
