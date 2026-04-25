@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BiodataController;
 // 1. TAMBAHKAN IMPORT INI DI ATAS
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,5 +34,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/product/edit/{product}', [ProductController::class, 'edit'])->name('product.edit');
     Route::delete('/product/delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
 });
+Route::resource('category', CategoryController::class);
 
 require __DIR__.'/auth.php';

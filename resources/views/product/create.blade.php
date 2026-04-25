@@ -1,112 +1,119 @@
 <x-app-layout>
-    <div class="py-12">
+    <div class="py-12" style="background-color: #0f172a; min-height: 100vh;">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-8 text-gray-900 dark:text-gray-100">
+            
+            {{-- CONTAINER UTAMA --}}
+            <div style="background: #1e293b; border-radius: 16px; border: 1px solid #334155; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+                <div class="p-8">
 
-                    {{-- Header --}}
-                    <div class="flex items-center gap-4 mb-8">
-                        <a href="{{ route('product.index') }}" class="p-2 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    {{-- HEADER --}}
+                    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 32px;">
+                        <a href="{{ route('product.index') }}" 
+                           style="padding: 8px; border-radius: 8px; color: #94a3b8; background: #0f172a; border: 1px solid #334155; transition: all 0.2s; text-decoration: none;"
+                           onmouseover="this.style.color='white'; this.style.borderColor='#4f46e5'"
+                           onmouseout="this.style.color='#94a3b8'; this.style.borderColor='#334155'">
+                            <svg xmlns="http://www.w3.org/2000/svg" style="height: 20px; width: 20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                             </svg>
                         </a>
                         <div>
-                            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 tracking-tight">Add Product</h2>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Fill in the details to add a new product.</p>
+                            <h2 style="font-size: 24px; font-weight: 800; color: white; letter-spacing: -0.025em; margin: 0;">Add Product</h2>
+                            <p style="font-size: 14px; color: #94a3b8; margin-top: 4px;">Fill in the details to add a new product to inventory.</p>
                         </div>
                     </div>
 
-                    {{-- Form --}}
-                    <form action="{{ route('product.store') }}" method="POST" class="space-y-6">
+                    {{-- FORM --}}
+                    <form action="{{ route('product.store') }}" method="POST" style="display: flex; flex-direction: column; gap: 24px;">
                         @csrf
 
-                        {{-- Name --}}
+                        {{-- NAMA PRODUK --}}
                         <div>
-                            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Product Name <span class="text-red-500">*</span>
+                            <label style="display: block; font-size: 14px; font-weight: 600; color: #cbd5e1; margin-bottom: 8px;">
+                                Product Name <span style="color: #ef4444;">*</span>
                             </label>
-                            <input type="text" id="name" name="name" value="{{ old('name') }}" 
-                                placeholder="e.g. Wireless Headphones"
-                                class="w-full px-4 py-2.5 rounded-lg border text-sm transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent 
-                                {{ $errors->has('name') ? 'border-red-500 ring-1 ring-red-500 bg-red-50/50 dark:bg-red-900/30' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700' }} 
-                                text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500">
-                            
-                            {{-- Perbaikan Warna Error Name --}}
+                            <input type="text" name="name" value="{{ old('name') }}" placeholder="e.g. Wireless Headphones"
+                                   style="width: 100%; padding: 12px 16px; background: #0f172a; border: 1px solid {{ $errors->has('name') ? '#ef4444' : '#334155' }}; border-radius: 10px; color: white; font-size: 14px; transition: all 0.2s; outline: none;"
+                                   onfocus="this.style.borderColor='#4f46e5'; this.style.ring='2px #4f46e5'">
                             @error('name')
-                                <p class="mt-2 text-sm text-red-600 dark:text-red-400 font-bold animate-pulse">
-                                    ⚠️ {{ $message }}
-                                </p>
+                                <p style="margin-top: 8px; font-size: 13px; color: #f87171; font-weight: 700;">⚠️ {{ $message }}</p>
                             @enderror
                         </div>
 
-                        {{-- Quantity & Price --}}
-                        <div class="grid grid-cols-2 gap-4">
+                        {{-- DROPDOWN KATEGORI (Baru Sesuai Instruksi) --}}
+                        <div>
+                            <label style="display: block; font-size: 14px; font-weight: 600; color: #cbd5e1; margin-bottom: 8px;">
+                                Category <span style="color: #ef4444;">*</span>
+                            </label>
+                            <select name="category_id" 
+                                    style="width: 100%; padding: 12px 16px; background: #0f172a; border: 1px solid {{ $errors->has('category_id') ? '#ef4444' : '#334155' }}; border-radius: 10px; color: white; font-size: 14px; outline: none; appearance: none;">
+                                <option value="" style="color: #64748b;">-- Pilih Kategori --</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('category_id')
+                                <p style="margin-top: 8px; font-size: 13px; color: #f87171; font-weight: 700;">⚠️ {{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        {{-- QUANTITY & PRICE --}}
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
                             <div>
-                                <label for="quantity" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Quantity <span class="text-red-500">*</span>
+                                <label style="display: block; font-size: 14px; font-weight: 600; color: #cbd5e1; margin-bottom: 8px;">
+                                    Quantity <span style="color: #ef4444;">*</span>
                                 </label>
-                                <input type="number" id="quantity" name="quantity" value="{{ old('quantity') }}"
-                                    placeholder="0"
-                                    class="w-full px-4 py-2.5 rounded-lg border text-sm transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent 
-                                    {{ $errors->has('quantity') ? 'border-red-500 ring-1 ring-red-500 bg-red-50/50 dark:bg-red-900/30' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700' }} 
-                                    text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500">
-                                
+                                <input type="number" name="quantity" value="{{ old('quantity', 0) }}" placeholder="0"
+                                       style="width: 100%; padding: 12px 16px; background: #0f172a; border: 1px solid {{ $errors->has('quantity') ? '#ef4444' : '#334155' }}; border-radius: 10px; color: white; font-size: 14px; outline: none;">
                                 @error('quantity')
-                                    <p class="mt-2 text-sm text-red-600 dark:text-red-400 font-bold">
-                                        ⚠️ {{ $message }}
-                                    </p>
+                                    <p style="margin-top: 8px; font-size: 13px; color: #f87171; font-weight: 700;">⚠️ {{ $message }}</p>
                                 @enderror
                             </div>
 
                             <div>
-                                <label for="price" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                    Price (Rp) <span class="text-red-500">*</span>
+                                <label style="display: block; font-size: 14px; font-weight: 600; color: #cbd5e1; margin-bottom: 8px;">
+                                    Price (Rp) <span style="color: #ef4444;">*</span>
                                 </label>
-                                <input type="number" id="price" name="price" value="{{ old('price') }}"
-                                    placeholder="0" step="0.01"
-                                    class="w-full px-4 py-2.5 rounded-lg border text-sm transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent 
-                                    {{ $errors->has('price') ? 'border-red-500 ring-1 ring-red-500 bg-red-50/50 dark:bg-red-900/30' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700' }} 
-                                    text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500">
-                                
+                                <input type="number" name="price" value="{{ old('price', 0) }}" placeholder="0" step="0.01"
+                                       style="width: 100%; padding: 12px 16px; background: #0f172a; border: 1px solid {{ $errors->has('price') ? '#ef4444' : '#334155' }}; border-radius: 10px; color: white; font-size: 14px; outline: none;">
                                 @error('price')
-                                    <p class="mt-2 text-sm text-red-600 dark:text-red-400 font-bold">
-                                        ⚠️ {{ $message }}
-                                    </p>
+                                    <p style="margin-top: 8px; font-size: 13px; color: #f87171; font-weight: 700;">⚠️ {{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
 
-                        {{-- User / Owner --}}
+                        {{-- OWNER / USER --}}
                         <div>
-                            <label for="user_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Owner <span class="text-red-500">*</span>
+                            <label style="display: block; font-size: 14px; font-weight: 600; color: #cbd5e1; margin-bottom: 8px;">
+                                Owner <span style="color: #ef4444;">*</span>
                             </label>
-                            <select id="user_id" name="user_id" 
-                                class="w-full px-4 py-2.5 rounded-lg border text-sm transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent 
-                                {{ $errors->has('user_id') ? 'border-red-500 ring-1 ring-red-500 bg-red-50/50 dark:bg-red-900/30' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700' }} 
-                                text-gray-900 dark:text-gray-100">
+                            <select name="user_id" 
+                                    style="width: 100%; padding: 12px 16px; background: #0f172a; border: 1px solid {{ $errors->has('user_id') ? '#ef4444' : '#334155' }}; border-radius: 10px; color: white; font-size: 14px; outline: none;">
                                 <option value="">-- Select Owner --</option>
                                 @foreach ($users as $user)
-                                    <option value="{{ $user->id }}" 
-                                        {{ (old('user_id') ?? Auth::id()) == $user->id ? 'selected' : '' }}>
+                                    <option value="{{ $user->id }}" {{ (old('user_id') ?? Auth::id()) == $user->id ? 'selected' : '' }}>
                                         {{ $user->name }} {{ $user->id == Auth::id() ? '(Me)' : '' }}
                                     </option>
                                 @endforeach
                             </select>
                             @error('user_id')
-                                <p class="mt-2 text-sm text-red-600 dark:text-red-400 font-bold">
-                                    ⚠️ {{ $message }}
-                                </p>
+                                <p style="margin-top: 8px; font-size: 13px; color: #f87171; font-weight: 700;">⚠️ {{ $message }}</p>
                             @enderror
                         </div>
 
-                        {{-- Actions --}}
-                        <div class="flex items-center justify-end gap-3 pt-2">
-                            <a href="{{ route('product.index') }}" class="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                        {{-- BUTTON ACTIONS --}}
+                        <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-top: 16px; padding-top: 24px; border-top: 1px solid #334155;">
+                            <a href="{{ route('product.index') }}" 
+                               style="padding: 10px 20px; border-radius: 10px; border: 1px solid #334155; color: #94a3b8; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 0.2s;"
+                               onmouseover="this.style.background='#334155'; this.style.color='white'"
+                               onmouseout="this.style.background='transparent'; this.style.color='#94a3b8'">
                                 Cancel
                             </a>
-                            <button type="submit" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg shadow-sm transition">
+                            <button type="submit" 
+                                    style="padding: 10px 24px; background: #4f46e5; color: white; border-radius: 10px; font-size: 14px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4); transition: all 0.2s;"
+                                    onmouseover="this.style.background='#4338ca'; this.style.transform='translateY(-1px)'"
+                                    onmouseout="this.style.background='#4f46e5'; this.style.transform='translateY(0)'">
                                 Save Product
                             </button>
                         </div>

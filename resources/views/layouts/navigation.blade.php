@@ -15,9 +15,15 @@
                     <x-nav-link :href="route('about')" :active="request()->routeIs('about')">
                         {{ __('About') }}
                      </x-nav-link>
+
                      {{-- Link Product --}}
                      <x-nav-link :href="route('product.index')" :active="request()->routeIs('product.*')">
                         {{ __('Product') }}
+                    </x-nav-link>
+
+                    {{-- TAMBAHKAN LINK CATEGORY DISINI (UCP 1) --}}
+                    <x-nav-link :href="route('category.index')" :active="request()->routeIs('category.*')">
+                        {{ __('Category') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -27,7 +33,6 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            {{-- TAMPILKAN ROLE DISINI (TUGAS KELAS B) --}}
                             <div class="flex items-center gap-1">
                                 <span>{{ Auth::user()->name }}</span>
                                 <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded font-bold uppercase text-gray-600 border border-gray-200">
@@ -72,6 +77,7 @@
         </div>
     </div>
 
+    {{-- Responsive Navigation Menu (Mobile) --}}
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
@@ -80,15 +86,18 @@
             <x-responsive-nav-link :href="route('about')" :active="request()->routeIs('about')">
                 {{ __('About') }}
             </x-responsive-nav-link>
-            {{-- Link Product di Mobile --}}
             <x-responsive-nav-link :href="route('product.index')" :active="request()->routeIs('product.*')">
                 {{ __('Product') }}
+            </x-responsive-nav-link>
+            
+            {{-- LINK CATEGORY MOBILE (UCP 1) --}}
+            <x-responsive-nav-link :href="route('category.index')" :active="request()->routeIs('category.*')">
+                {{ __('Category') }}
             </x-responsive-nav-link>
         </div>
 
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
-                {{-- Tampilkan Nama & Role di Mobile --}}
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }} ({{ strtoupper(Auth::user()->role) }})</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>

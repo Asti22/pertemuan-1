@@ -21,6 +21,7 @@ class StoreProductRequest extends FormRequest
             'quantity' => 'required|integer|min:1',
             'price'    => 'required|numeric|min:0',
             'user_id'  => 'required|exists:users,id',
+            'category_id' => 'required|exists:category,id'
         ];
     }
 
@@ -31,7 +32,8 @@ class StoreProductRequest extends FormRequest
             'name.min'          => 'Nama produk minimal 3 huruf dong.',
             'quantity.min'      => 'Stok minimal harus 1 ya.', // Tambahan
             'price.numeric'     => 'Harga harus berupa angka.',
-            'price.min'         => 'Masa harganya gratis? Kasih minimal 0 deh.', // Tambahan
+            'price.min'         => 'Masa harganya gratis? Kasih minimal 0 deh.', 
+            'category_id.required' => 'Pilih kategorinya dulu!'// Tambahan
         ];
     }
 }

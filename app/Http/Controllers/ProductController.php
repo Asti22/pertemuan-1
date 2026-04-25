@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Category; // Tambahkan ini
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-// IMPORT Form Request buatan kita
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 
@@ -14,10 +14,19 @@ class ProductController extends Controller
 {
     public function index()
     {
-        // Eager Loading 'user' agar tidak lambat saat narik data
-        $products = Product::with('user')->get();
+        // Eager loading 'user' dan 'category' agar performa tetap kencang
+        $products = Product::with(['user', 'category'])->get();
 
         return view('product.index', compact('products'));
+    }
+
+    public function create()
+    {
+        // Mengambil data kategori untuk dropdown di form
+        $categories = Category::orderBy('name')->get();
+        $users = User::orderBy('name')->get();
+
+        return view('product.create', compact('users', 'categories'));
     }
 
     /**
@@ -25,9 +34,7 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        // Laravel otomatis menjalankan validasi sebelum masuk ke sini.
-        // Jika gagal, user langsung dikembalikan ke form dengan pesan error.
-        
+        // Data category_id sudah divalidasi di StoreProductRequest
         $validated = $request->validated();
 
         Product::create($validated);
@@ -35,16 +42,10 @@ class ProductController extends Controller
         return redirect()->route('product.index')->with('success', 'Product created successfully.');
     }
 
-    public function create()
-    {
-        $users = User::orderBy('name')->get();
-
-        return view('product.create', compact('users'));
-    }
-
     public function show($id)
     {
-        $product = Product::findOrFail($id);
+        // Load category juga saat melihat detail produk
+        $product = Product::with('category')->findOrFail($id);
 
         return view('product.view', compact('product'));
     }
@@ -54,9 +55,10 @@ class ProductController extends Controller
         // [PERTEMUAN 5] Otorisasi Policy
         Gate::authorize('update', $product);
 
+        $categories = Category::orderBy('name')->get();
         $users = User::orderBy('name')->get();
 
-        return view('product.edit', compact('product', 'users'));
+        return view('product.edit', compact('product', 'users', 'categories'));
     }
 
     /**
@@ -69,7 +71,7 @@ class ProductController extends Controller
         // [PERTEMUAN 5] Otorisasi Policy
         Gate::authorize('update', $product);
 
-        // Ambil data yang sudah lolos validasi
+        // Ambil data yang sudah lolos validasi (termasuk category_id)
         $validated = $request->validated();
 
         $product->update($validated);
@@ -94,6 +96,7 @@ class ProductController extends Controller
      */
     public function export()
     {
+        // Menggunakan Gate untuk rule akses khusus Admin
         Gate::authorize('export-product');
         
         return "Fungsi export sedang dalam pengembangan. Hanya Admin yang bisa melihat pesan ini.";
