@@ -95,10 +95,13 @@ class ProductController extends Controller
      * [TAMBAHAN TUGAS KELAS B] Fungsi Export
      */
     public function export()
-    {
-        // Menggunakan Gate untuk rule akses khusus Admin
-        Gate::authorize('export-product');
-        
-        return "Fungsi export sedang dalam pengembangan. Hanya Admin yang bisa melihat pesan ini.";
+{
+    // Cek Gate 'export-product' yang kita buat di AppServiceProvider tadi
+    if (!Gate::allows('export-product')) {
+        abort(403, 'Anda tidak memiliki akses untuk export data.');
     }
+
+    // Logika download/export kamu di sini
+    return response()->download(public_path('file-contoh.xlsx')); 
+}
 }
