@@ -1,7 +1,6 @@
 <img width="1280" height="800" alt="Screen Shot 2026-05-03 at 20 44 27" src="https://github.com/user-attachments/assets/15dcec51-d6c3-41a1-8b59-3d74672012b2" />
 <img width="1280" height="800" alt="Screen Shot 2026-05-03 at 20 48 37" src="https://github.com/user-attachments/assets/068b68a0-a41d-4999-ae34-999445c9e60f" />
-<img width="1280" height="800" alt="Screen Shot 2026-05-03 at 20 52 11" src="https://github.com/user-attachments/assets/4e2ead75-f2d6-440f-9726-a64ac07ca23c" />
-<img width="1280" height="800" alt="Screen Shot 2026-05-03 at 21 02 31" src="https://github.com/user-attachments/assets/8877b5f7-98ac-42de-97de-75bddb63b8b6" />
+
 <img width="1280" height="800" alt="Screen Shot 2026-05-03 at 21 31 29" src="https://github.com/user-attachments/assets/280e4692-93b3-496d-96f7-2b2397b0fbd9" />
 <img width="1280" height="800" alt="Screen Shot 2026-05-03 at 21 31 45" src="https://github.com/user-attachments/assets/d695b981-f257-4007-bd8b-dff9c8cc6455" />
 <img width="1280" height="800" alt="Screen Shot 2026-05-03 at 21 35 19" src="https://github.com/user-attachments/assets/9b35ba0d-5b42-478a-824f-a892dc05379b" />
